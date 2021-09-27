@@ -1,3 +1,5 @@
+package lexico;
+
 public class Principal {
   public static void main(String[] args) {
     NossoScanner nS = new NossoScanner("programa.xeque");

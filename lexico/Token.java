@@ -1,3 +1,5 @@
+package lexico;
+
 class Token {
   private String tipo;
   private String valor;

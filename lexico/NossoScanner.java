@@ -1,3 +1,5 @@
+package lexico;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,13 +24,14 @@ class NossoScanner {
 
   public Token lerToken() {
     char caractereLido;
-    Token token = new Token();
+    Token token;
     String lexema = "";
 
     if (ehEOF()) {
       return null;
     }
 
+    this.estado = 0;
     while(true) {
       caractereLido = proximoCaractere();
 
@@ -42,12 +45,12 @@ class NossoScanner {
             lexema += caractereLido;
           } else if (ehEspaco(caractereLido)) { // espaço
             this.estado = 0;
-            caractereLido = proximoCaractere();
           } else if (ehOperador(caractereLido)) { // operador
             lexema += caractereLido;
+            token = new Token();
             token.setTipo("operador");
             token.setValor(lexema);
-            System.out.println(lexema);
+
             return token;
           } else {
             throw new RuntimeException("Simbolo não reconhecido " + caractereLido);
@@ -64,6 +67,7 @@ class NossoScanner {
             }
 
             lexema += caractereLido;
+            token = new Token();
             token.setTipo("identificador");
             token.setValor(lexema);
             return token;
@@ -74,7 +78,24 @@ class NossoScanner {
           break;
 
         case 2:
-          
+          if (ehDigito(caractereLido)) {
+            this.estado = 2;
+            lexema += caractereLido;
+          } else if (
+            !ehCaractere(caractereLido) &&
+            !ehEOF(caractereLido)) {
+              if (!ehEOF(caractereLido)) {
+                this.voltarCaractere();
+              }
+
+              token = new Token();
+              token.setTipo("número");
+              token.setValor(lexema);
+
+              return token;
+          } else {
+            throw new RuntimeException("Simbolo não reconhecido " + caractereLido);
+          }
           break;
       }
     }
@@ -85,7 +106,7 @@ class NossoScanner {
   }
 
   private boolean ehDigito(char c) {
-    return c >= '0' && c <= '9';
+    return (c >= '0' && c <= '9') || c == '.';
   }
 
   private boolean ehOperador(char c) {
