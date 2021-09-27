@@ -2,4 +2,8 @@ soma = x + y
 78+67
 soma
 abc
+abc+=abc
+abc += cba
+abc ==+ abc
+x+y
 678abc

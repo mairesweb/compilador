@@ -46,12 +46,8 @@ class NossoScanner {
           } else if (ehEspaco(caractereLido)) { // espaço
             this.estado = 0;
           } else if (ehOperador(caractereLido)) { // operador
+            this.estado = 3;
             lexema += caractereLido;
-            token = new Token();
-            token.setTipo("operador");
-            token.setValor(lexema);
-
-            return token;
           } else {
             throw new RuntimeException("Simbolo não reconhecido " + caractereLido);
           }
@@ -66,7 +62,6 @@ class NossoScanner {
               this.voltarCaractere();
             }
 
-            lexema += caractereLido;
             token = new Token();
             token.setTipo("identificador");
             token.setValor(lexema);
@@ -97,6 +92,52 @@ class NossoScanner {
             throw new RuntimeException("Simbolo não reconhecido " + caractereLido);
           }
           break;
+        case 3:
+          if (ehOperador(caractereLido)) {
+            this.estado = 4;
+            lexema += caractereLido;
+          } else if (
+            ehCaractere(caractereLido) ||
+            ehEspaco(caractereLido) ||
+            ehDigito(caractereLido) ||
+            ehEOF(caractereLido)
+          ) {
+            if (!ehEOF(caractereLido)) {
+              this.voltarCaractere();
+            }
+
+            this.estado = 0;
+
+            token = new Token();
+            token.setTipo("operador");
+            token.setValor(lexema);
+            return token;
+          } else {
+            throw new RuntimeException("Simbolo não reconhecido " + caractereLido);
+          }
+
+          break;
+        case 4:
+          if (
+            ehCaractere(caractereLido) ||
+            ehEspaco(caractereLido) ||
+            ehDigito(caractereLido) ||
+            ehEOF(caractereLido)
+          ) {
+            if (!ehEOF(caractereLido)) {
+              this.voltarCaractere();
+            }
+
+            this.estado = 0;
+
+            token = new Token();
+            token.setTipo("operador");
+            token.setValor(lexema);
+            return token;
+          } else {
+            lexema += caractereLido;
+            throw new RuntimeException("Simbolo não reconhecido " + lexema);
+          }
       }
     }
   }
