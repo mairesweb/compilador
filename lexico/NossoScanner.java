@@ -1,10 +1,9 @@
 package lexico;
-
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-class NossoScanner {
+public class NossoScanner {
   private char [] conteudoArray;
   private int posicao;
   private int estado;
@@ -73,12 +72,12 @@ class NossoScanner {
           break;
 
         case 2:
-          if (ehDigito(caractereLido)) {
+          if (ehDigito(caractereLido) || caractereLido == '.') {
             this.estado = 2;
             lexema += caractereLido;
           } else if (
-            !ehCaractere(caractereLido) &&
-            !ehEOF(caractereLido)) {
+            !ehCaractere(caractereLido) ||
+            ehEOF(caractereLido)) {
               if (!ehEOF(caractereLido)) {
                 this.voltarCaractere();
               }
