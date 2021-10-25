@@ -1,4 +1,5 @@
-package lexico;
+import lexico.NossoScanner;
+import lexico.Token;
 
 public class Principal {
   public static void main(String[] args) {
