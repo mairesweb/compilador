@@ -37,7 +37,7 @@ class NossoScanner {
 
       switch(this.estado) {
         case 0:
-          if (ehCaractere(caractereLido)) { // identificador
+          if (ehCaractere(caractereLido)) { // identificador ou palavra reservada
             this.estado = 1;
             lexema += caractereLido;
           } else if (ehDigito(caractereLido)) { // número
@@ -176,5 +176,25 @@ class NossoScanner {
 
   private void voltarCaractere() {
     this.posicao--;
+  }
+
+  private boolean ehPalavraReservada(char c) {
+    int temp = this.posicao;
+    if (c == 'c') {
+      if (this.conteudoArray[temp++] == 'l') {
+        if (this.conteudoArray[temp++] == 'a') {
+          if (this.conteudoArray[temp++] == 's') {
+            if (this.conteudoArray[temp++] == 's') {
+              this.posicao = temp;
+              return true;
+            }
+          }
+        }
+      }
+    } else if (c == 'f') {
+      
+    }
+
+    return false;
   }
 }
