@@ -1,6 +1,6 @@
 package lexico;
 
-class Token {
+public class Token {
   private String tipo;
   private String valor;
 
